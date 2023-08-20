@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+th:replace="Normal/dashboard::layout(~{::section})">
+<head>
+	<meta charset="UTF-8" />
+	<title></title>
+</head>
+<body>
+	<section class="text-center">
+	<div class="card mr-3">
+	<div class="card-body" >
+	<h4 class="alert alert-info text-center">Your Profile</h4>
+	
+	<div class="container-fluid  p-4" style="background:rgb(230, 230, 230);">
+	<div class="row">
+	<div class="col-md-10 offset-md-1">
+	
+	<h3 th:classappend="${session.message7.type}" class="text-center alert" th:if="${session.message7}" role="alert" th:text="${session.message7.content}"></h3>
+	
+	<div>
+	
+	<img style="height:200px; width:200px;" 
+	class="my_profile_picture" th:src="@{'/images/'+${user.imageUrl}}" 
+	alt="Profile Image" />
+	
+	<h3 th:text="${user.name}"></h3>
+	
+		<table class="text-center mt-4 table align-middle mb-0 bg-white">
+		<tbody>	
+    <tr>
+      <td class="fw-bold mb-1">#UserID</td>
+      <td th:text="'SCM2023USER'+${user.uid}"></td>
+    </tr>
+    
+    <tr>
+    <td class="fw-bold mb-1">Username</td>
+    <td th:text="${user.email}"></td>
+    </tr>
+    
+    <tr>
+    <td class="fw-bold mb-1">User Status</td>
+    <td th:if=${user.enabled} th:text="Active"></td>
+    <td th:unless=${user.enabled} th:text="Banned"></td>
+    </tr>
+    
+    <tr>
+    <td class="fw-bold mb-1">Privileges</td>
+    <td th:text="${user.role}"></td>
+    </tr>
+    
+    </tbody>
+</table>
+
+	<div class="container mt-4" style="background:white;">
+	<div class="description">
+	<span th:utext="${user.about}"></span>
+	</div>
+	</div>
+	
+	<div class="container mt-4">
+	
+		<form method="post" th:action="@{'/user/'+${user.uid}+'/update'}">
+        <button type="submit" class="btn btn-outline-primary" 
+        style="color:blue;">
+          Edit
+        </button>
+      
+	<a class="btn btn-outline-danger" 
+	th:onclick="|deleteUser(${user.uid})|">Delete Account</a>
+	</form>
+
+	</div>
+	
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</section>
+</body>
+</html>

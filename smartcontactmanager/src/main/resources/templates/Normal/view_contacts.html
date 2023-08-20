@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+th:replace="Normal/dashboard::layout(~{::section})">
+<head>
+	<meta charset="UTF-8" />
+	<title></title>
+</head>
+<body>
+	<section class="text-center">
+	<div class="card mr-3">
+	<div class="card-body" >
+	<h4 class="alert alert-info">Your Contacts</h4>
+
+	<div class="search-container my-3">
+	<input type="text" onKeyUp="search()" class="form-control" id="search-input" placeholder="Search your contact by name..."/>
+	<div class="search-result">
+	</div>
+	</div>
+	
+	<div class="container p-4" style="background:rgb(230, 230, 230);">
+	<div class="row">
+	<div class="col">
+	
+	<h2 th:classappend="${session.message3.type}" class="text-center alert" role="alert" th:if="${totalRecords==0}" th:text="${session.message3.content}"></h2>
+	<h4 th:classappend="${session.message5.type}" th:unless="${totalRecords==0}" th:if=${session.message5} class="text-center alert" role="alert" th:text="${session.message5.content}"></h4>
+	<div th:unless="${totalRecords==0}">
+	<table class="table table-container align-middle mb-0 bg-white">
+  <thead class="bg-light">
+    <tr>
+    <th>Serial No.</th>
+      <th>#ID</th>
+      <th>Name</th>
+      <th>UserId/Email</th>
+      <th>Contact</th>
+      <th>Profession</th>
+      <th>Actions</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr th:each="c,iterator:${contacts}">
+    <td th:text="${(currentPage)*recordsPerPage+iterator.count}"></td>
+    <td class="fw-bold mb-1" th:text="'SCM2023USER'+${c.cid}"></td>
+      <td>
+        <div class="d-flex align-items-center">
+          <img
+              th:src="@{'/images/'+${c.image}}"
+              alt="Profile Pic"
+              class="my_profile_picture"
+              />
+          <div class="ms-3">
+            <p  th:text="${c.name}" class="mb-1">John Doe</p>
+            <p th:text="${c.nickName}" class="text-muted mb-0">john.doe@gmail.com</p>
+          </div>
+        </div>
+      </td>
+      <td class="fw-bold mb-1" th:text="${c.email}"></td>
+      <td>
+        <p th:text="${c.phone}" class="fw-normal mb-1">Software engineer</p>
+      </td>
+      
+      <td th:text="${c.work}"></td>
+      <td>
+      
+      	<a th:href="@{'/user/contact/'+${c.cid}}">
+        <button type="button"  class="btn btn-link btn-sm btn-rounded" 
+        style="color:lightblue;">
+        More
+        </button></a>
+        
+        <form method="post" th:action="@{'/user/update/'+${c.cid}}">
+        <button type="submit" class="btn btn-link btn-sm btn-rounded" 
+        style="color:blue;">
+          Edit
+        </button>
+        </form>
+        
+        <a th:onclick="|deleteContact(${c.cid})|">
+        <button type="button" class="btn btn-link btn-sm btn-rounded" 
+        style="color:red;">
+          Delete
+        </button>
+        </a>
+        
+      </td>
+    </tr>
+     
+  </tbody>
+</table>	
+		</div>
+	</div>
+	</div>
+	</div>
+				<!--  Pagination  -->
+		
+		<nav aria-label="Page navigation example">
+		  <ul class="pagination justify-content-center">
+		  
+		    <li th:if="${currentPage>0}" class="page-item">
+		    <a class="page-link" th:href="@{'/user/view-contacts/'+${currentPage-1}}">
+		    Previous
+		    </a></li>
+		    
+		    <li th:each="i:${#numbers.sequence(1,totalPages,1)}" 
+		    th:classappend="${currentPage==i-1}?'active':''" class="page-item">
+		    <a class="page-link" th:text="${i}" th:href="@{'/user/view-contacts/'+${i-1}}">
+		    </a></li>
+		    
+		    <li th:if="${currentPage+1<totalPages}" class="page-item">
+		    <a class="page-link" th:href="@{'/user/view-contacts/'+${currentPage+1}}">
+		    Next
+		    </a></li>
+		    
+		  </ul>
+		</nav>
+	</div>
+	</div>
+	</section>
+</body>
+</html>

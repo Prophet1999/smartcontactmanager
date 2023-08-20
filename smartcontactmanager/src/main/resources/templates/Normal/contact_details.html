@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+th:replace="Normal/dashboard::layout(~{::section})">
+<head>
+	<meta charset="UTF-8" />
+	<title></title>
+</head>
+<body>
+	<section class="text-center">
+	<div class="card mr-3">
+	<div class="card-body" >
+	<h4 class="alert alert-info text-center">Your Contacts</h4>
+	
+	<div class="container-fluid  p-4" style="background:rgb(230, 230, 230);">
+	<div class="row">
+	<div class="col-md-10 offset-md-1">
+	
+	<h2 th:classappend="${session.message4.type}" class="text-center alert" role="alert" th:unless="${contact}" th:text="${session.message4.content}"></h2>
+	<h3 th:classappend="${session.message6.type}" class="text-center alert" th:if="${session.message6}" role="alert" th:text="${session.message6.content}"></h3>
+	
+	<div th:if="${contact}">
+	
+	<img style="height:200px; width:200px;" 
+	class="my_profile_picture" th:src="@{'/images/'+${contact.image}}" 
+	alt="Profile Image" />
+	
+	<h3><span th:text="${contact.name}"></span> 
+	( <span th:text="${contact.nickName}"></span> )</h3>
+	
+		<table class="text-center mt-4 table align-middle mb-0 bg-white">
+		<tbody>	
+    <tr>
+      <td class="fw-bold mb-1">#ID</td>
+      <td th:text="'SCM2023USER'+${contact.cid}"></td>
+    </tr>
+    
+    <tr>
+    <td class="fw-bold mb-1">UserId/Email</td>
+    <td th:text="${contact.email}"></td>
+    </tr>
+    
+    <tr>
+    <td class="fw-bold mb-1">Contact</td>
+    <td th:text="${contact.phone}"></td>
+    </tr>
+    
+    <tr>
+    <td class="fw-bold mb-1">Profession</td>
+    <td th:text="${contact.work}"></td>
+    </tr>
+    </tbody>
+</table>
+
+	<div class="container mt-4" style="background:white;">
+	<div class="description">
+	<span th:utext="${contact.description}"></span>
+	</div>
+	</div>
+	
+	<div class="container mt-4">
+	
+		<form method="post" th:action="@{'/user/update/'+${contact.cid}}">
+        <button type="submit" class="btn btn-outline-primary" 
+        style="color:blue;">
+          Edit
+        </button>
+      
+	<a class="btn btn-outline-danger" 
+	th:onclick="|deleteContact(${contact.cid})|">Delete</a>
+	</form>
+
+	</div>
+	
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	</section>
+</body>
+</html>

@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+th:replace="Normal/dashboard::layout(~{::section})">
+<head>
+	<meta charset="UTF-8" />
+	<title></title>
+</head>
+<body>
+	<section class="text-center">
+	<div class="card mr-3">
+	<div class="card-body" >
+	<h3 class="alert alert-info">Update Your Details</h3>
+	
+	<div class="container-fluid mt-2 p-4" style="background:rgb(230, 230, 230);">
+	<div class="row">
+	<div class="col-md-8 offset-md-2">
+				
+	<form novalidate th:action="@{/user/updateUser}" method="post" 
+	th:object="${user}" enctype="multipart/form-data" class="mt-2">
+	
+	<div class="container text-center">
+	<img style="height:80px;width:80px;" th:src="@{/images/membership.png}" alt="Form submit here" />
+	</div>
+	
+	<!-- Contact ID -->
+	<input type="hidden" class="form-control" 
+	placeHolder="Enter ID here" th:value="${user.uid}" id="inputId" name="uid"/>
+		
+	<!--FirstName  -->
+	<div class="input-group mt-3">
+	<div class="input-group-prepend">
+	<div class="input-group-text mr-3">
+	<i class="fas fa-user-alt ">
+	</i>
+	</div>
+	</div>
+	<input th:classappend="${#fields.hasErrors('name')?'is-invalid':''}" type="text" class="form-control" 
+	placeHolder="Enter Name here" th:value="${user.name}" id="inputName" name="name"/>
+	<div th:each="e:${#fields.errors('name')}" class="invalid-feedback" th:text="${e}"></div>
+	</div>
+	
+	<!--Username -->
+	<div class="input-group mt-3">
+	<div class="input-group-prepend">
+	<div class="input-group-text">
+	<i class="fa">
+	@
+	</i>
+	</div>
+	</div>
+	<input th:classappend="${#fields.hasErrors('email')?'is-invalid':''}" type="email" class="form-control" 
+	placeHolder="Enter Email here" th:value="${user.email}" id="inputEmail" name="email"/>
+	<div th:each="e:${#fields.errors('email')}" class="invalid-feedback" th:text="${e}"></div>
+	</div>
+		<h6 class="text-muted alert-warning">Changing this field will logout from your current session.</h6>
+	
+	<!-- About -->
+	<div class="form-group mt-3">
+	<textarea th:classappend="${#fields.hasErrors('about')?'is-invalid':''}" name="about" id="TinyMCE" cols="8"
+	 rows="8" class="form-control" th:text="${user.about}" placeHolder="Enter something about yourself"></textarea>
+	<div th:each="e:${#fields.errors('about')}" class="invalid-feedback" th:text="${e}"></div>
+	</div>
+	
+	<!-- Image file -->
+	
+	<div class="container mt-3">
+	<img style="height:250px; width:250px;" class="my_profile_picture" th:src="@{'/images/'+${user.imageUrl}}" alt="Contact image here" />
+	</div>
+	
+	<div class="form-group mt-3">
+	<input th:classappend="${#fields.hasErrors('imageUrl')?'is-invalid':''}" type="file" class="form-control" id="inputFile" name="profileImage"/>
+	<div th:each="e:${#fields.errors('imageUrl')}" th:value="${file}" class="invalid-feedback" th:text="${e}"></div>
+	</div>
+	
+	<!-- Submit button -->
+	<div class="form-group mt-3">
+	<button type="submit" 
+	class="btn btn-outline-primary">Save</button>
+	
+	<!-- Reset button -->
+	<button type="reset" 
+	class="btn btn-outline-danger">Reset</button>
+	</div>
+	
+	</form>
+	</div>
+	</div>
+	</div>
+	</div>
+	</div>
+	
+	<script>
+      tinymce.init({
+        selector: '#TinyMCE'
+      });
+    </script>
+    
+	</section>
+</body>
+</html>
