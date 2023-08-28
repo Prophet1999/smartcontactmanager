@@ -55,6 +55,9 @@ v2.3
 3. **Fast and ight weight:** Small sized application to provide max speed.
 4. **Upgradability:** Because of it's loosely coupled architecture, it is very easy and convenient to add new features  .
 
+# POJO Logic
+https://github.com/Prophet1999/smartcontactmanager/blob/master/SmartContactManager.png
+
 # Installation
 There are two ways of running the app:<br/>
 ### **A. Run on web**
