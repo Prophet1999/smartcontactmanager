@@ -56,7 +56,7 @@ v2.3
 4. **Upgradability:** Because of it's loosely coupled architecture, it is very easy and convenient to add new features  .
 
 # POJO Logic
-https://github.com/Prophet1999/smartcontactmanager/blob/master/SmartContactManager.png
+![POJO](/SmartContactManager.png)
 
 # Installation
 There are two ways of running the app:<br/>
