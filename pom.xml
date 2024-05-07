@@ -14,7 +14,7 @@
 	<name>smartcontactmanager</name>
 	<description>First integrated project on spring boot and thymeleaf</description>
 	<properties>
-		<java.version>19</java.version>
+		<java.version>11</java.version>
 <!-- 		<maven.compiler.source>17</maven.compiler.source>
     		<maven.compiler.target>17</maven.compiler.target> -->
 	</properties>
