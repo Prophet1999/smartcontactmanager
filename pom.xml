@@ -27,16 +27,21 @@
 			<artifactId>spring-boot-starter</artifactId>
 		</dependency>
 
+		<!-- https://mvnrepository.com/artifact/org.webjars/bootstrap -->
 		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>bootstrap</artifactId>
-			<version>4.3.1</version>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>bootstrap</artifactId>
+		    <version>5.3.3</version>
 		</dependency>
 
+
+		<!-- https://mvnrepository.com/artifact/org.webjars/webjars-locator-core -->
 		<dependency>
-			<groupId>org.webjars</groupId>
-			<artifactId>webjars-locator-core</artifactId>
+		    <groupId>org.webjars</groupId>
+		    <artifactId>webjars-locator-core</artifactId>
+		    <version>0.58</version>
 		</dependency>
+
 		
 		 <dependency>
 			<groupId>org.springframework.boot</groupId>
