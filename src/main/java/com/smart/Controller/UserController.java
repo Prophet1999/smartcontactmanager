@@ -280,4 +280,10 @@ public class UserController {
 		}
 		return "redirect:/logout";
 	}
+	
+	@GetMapping("/{uid}/settings")
+	public String settings()
+	{
+		return "Normal/userSettings";
+	}
 }

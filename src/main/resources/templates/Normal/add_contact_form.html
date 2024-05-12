@@ -127,6 +127,9 @@ th:replace="Normal/dashboard::layout(~{::section})">
       tinymce.init({
         selector: '#TinyMCE'
       });
+      
+		$('.item').removeClass('active');
+		$('#add-link').addClass('active');
     </script>
     
 	</section>
