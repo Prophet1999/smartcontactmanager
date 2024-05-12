@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+th:replace="Normal/dashboard::layout(~{::section})">
+<head>
+	<meta charset="UTF-8" />
+	<title></title>
+</head>
+<body>
+	<section class="text-center">
+	
+	<h2>Settings coming soon!!!</h2>
+	
+	<script>
+      tinymce.init({
+        selector: '#TinyMCE'
+      });
+      
+		$('.item').removeClass('active');
+		$('#settings-link').addClass('active');
+    </script>
+    
+	</section>
+</body>
+</html>

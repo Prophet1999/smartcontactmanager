@@ -17,15 +17,12 @@ th:replace="Normal/dashboard::layout(~{::section})">
 	</div>
 	</div>
 	
-	<div class="container p-4" style="background:rgb(230, 230, 230);">
-	<div class="row">
-	<div class="col">
-	
 	<h2 th:classappend="${session.message3.type}" class="text-center alert" role="alert" th:if="${totalRecords==0}" th:text="${session.message3.content}"></h2>
 	<h4 th:classappend="${session.message5.type}" th:unless="${totalRecords==0}" th:if=${session.message5} class="text-center alert" role="alert" th:text="${session.message5.content}"></h4>
 	<div th:unless="${totalRecords==0}">
-	<table class="table table-container align-middle mb-0 bg-white">
-  <thead class="bg-light">
+	<div class="table-responsive">
+	<table class="table table-container table-hover align-middle mb-0 bg-white">
+  <thead class="bg-light table-dark">
     <tr>
     <th>Serial No.</th>
       <th>#ID</th>
@@ -85,11 +82,11 @@ th:replace="Normal/dashboard::layout(~{::section})">
     </tr>
      
   </tbody>
-</table>	
+</table>
+</div>
+</div>	
 		</div>
-	</div>
-	</div>
-	</div>
+
 				<!--  Pagination  -->
 		
 		<nav aria-label="Page navigation example">
@@ -114,6 +111,12 @@ th:replace="Normal/dashboard::layout(~{::section})">
 		</nav>
 	</div>
 	</div>
+	
+	<script>
+		$('.item').removeClass('active');
+		$('#contacts-link').addClass('active');
+	</script>
+	
 	</section>
 </body>
 </html>
