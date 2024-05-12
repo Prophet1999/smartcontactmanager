@@ -8,6 +8,7 @@ const toggleSideBar=()=>
 		$(".sidebar").css("display","none");
 		$(".content").css("margin-left","0%");
 		$(".fa-bars").css("display","inline-block");
+
 	}
 	else{
 		//open sidebar

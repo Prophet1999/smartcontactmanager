@@ -15,12 +15,6 @@ th:replace="Normal/dashboard::layout(~{::section})">
 	<h4 th:text="${user.name}"></h4><b><i>You are successfully logged in!!!</i></b></div>
 	<a th:href="@{/user/add-contact}"><button class="btn btn-info btn-block form-control">Add to Cloud</button></a>
 	</div>
-	
-	<script>
-		$('.item').removeClass('active');
-		$('#home-link').addClass('active');
-	</script>
-	
 	</section>
 </body>
 </html>
