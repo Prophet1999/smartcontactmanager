@@ -91,7 +91,7 @@ public class ContactController {
 		return "Normal/update_contact";
 	}
 	
-	@RequestMapping(value="/updateContact",method=RequestMethod.POST)
+	@PostMapping("/updateContact")
 	public String processUpdate(@Valid @ModelAttribute Contact contact,
 			BindingResult result,@RequestParam("profileImage") MultipartFile file,
 			Principal p,HttpSession session,Model m)

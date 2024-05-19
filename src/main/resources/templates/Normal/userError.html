@@ -1,0 +1,19 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org" 
+th:replace="Normal/dashboard::layout(~{::section})">
+<head>
+	<meta charset="UTF-8" />
+	<title>Exception Page</title>
+</head>
+<body>
+	<section class="text-center">
+	
+	<h2 class="text-danger">Exception occurred at SmartContactsManager application!</h2>
+	
+	<div class="mt-3">
+	<a th:href="@{/user/index}">Click here to continue...</a>
+    </div>
+    
+	</section>
+</body>
+</html>

@@ -3,13 +3,47 @@
 th:replace="Normal/dashboard::layout(~{::section})">
 <head>
 	<meta charset="UTF-8" />
-	<title></title>
+	<title>Settings</title>
 </head>
 <body>
 	<section class="text-center">
 	
-	<h2>Settings coming soon!!!</h2>
+	<h2>Settings</h2>
+						
+	<div class="container-fluid mt-2">
+		
+		<div class="row">
+			
+			<div class="col-md-12">
+				
+				<h4 th:if="${session.message9}" th:classappend="${session.message9.type}" 
+						class="alert text-center" role="alert" th:text="${session.message9.content}"/>
+						
+				<div class="card">
+					
+					<div class="card-body">
+						
+						<h2 class="mb-2">Change Password</h2>
 	
+						<form th:action="@{/user/changePassword}" method="post">
+							<div class="form-group">
+							<input type="password" name="oldPassword" class="form-control" placeholder="Enter old password">
+							</div>
+							
+							<div class="form-group">
+							<input type="password" name="newPassword" class="form-control mt-2" placeholder="Enter new password">
+							</div>
+							
+							<button type="submit" class="btn btn-primary mt-3" style="margin-right: 15px;">Submit</button>
+							<button type="reset" class="btn btn-warning mt-3" style="margin-left: 15px;">Reset</button>
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+		
+		
+	</div>
 	<script>
       tinymce.init({
         selector: '#TinyMCE'

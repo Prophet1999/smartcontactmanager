@@ -14,6 +14,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -43,6 +44,9 @@ public class UserController {
 	
 	@Autowired
 	private ContactService conSer;
+	
+	@Autowired
+	private BCryptPasswordEncoder passwordEncoder;
 	
 	@ModelAttribute
 	public void addCommonData(Model m,Principal p)
@@ -286,4 +290,38 @@ public class UserController {
 	{
 		return "Normal/userSettings";
 	}
+	
+	@PostMapping("/changePassword")
+	public String changePassword(@RequestParam String oldPassword, 
+			@RequestParam String newPassword, Principal principal, HttpSession session)
+	{
+		System.out.println("old password:"+oldPassword);
+		System.out.println("new password:"+newPassword);
+		User user=userSer.fetchUser(principal.getName());
+		System.out.println("old encrypted password:"+user.getPassword());
+		
+		if(oldPassword==null || oldPassword.isEmpty() ||
+				newPassword==null || newPassword.isEmpty()) {
+			session.setAttribute("message9",new Message("Old and new passwords can't be empty...","alert-warning"));
+			System.out.println("Old and new passwords can't be empty...");
+			return "redirect:/user/"+user.getUid()+"/settings";
+		}
+
+		else if(passwordEncoder.matches(oldPassword,user.getPassword()))
+		{
+			//change the password
+			user.setPassword(passwordEncoder.encode(newPassword));
+			userSer.insertUser(user);
+			System.out.println("Password changed successfully...");
+			session.setAttribute("message9",new Message("Password changed successfully...","alert-success"));
+		}
+		else {
+			System.out.println("Wrong password entered...");
+			session.setAttribute("message9",new Message("Wrong password entered...","alert-danger"));
+			return "redirect:/user/"+user.getUid()+"/settings";
+		}
+		
+		return "redirect:/user/index";
+	}
+	
 }
