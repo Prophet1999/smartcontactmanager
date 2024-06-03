@@ -1,5 +1,7 @@
 package com.smart.Controller;
 
+import java.util.Random;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
@@ -12,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.smart.Entities.User;
 import com.smart.Helper.Message;
+import com.smart.Service.EmailService;
 import com.smart.Service.UserService;
 
 import jakarta.servlet.http.HttpSession;
@@ -25,6 +28,11 @@ public class HomeController {
 	
 	@Autowired
 	private BCryptPasswordEncoder encoder;
+	
+	@Autowired
+	private EmailService emailService;
+	
+	Random randomOTP = new Random(1000);
 	
 	@GetMapping("/")
 	public String defaulter()
@@ -105,5 +113,37 @@ public class HomeController {
 		}
 		//session.removeAttribute("message");
 		return "signup";
+	}
+	
+	@GetMapping("/forgot-password")
+	public String forgotPassword()
+	{
+		return "forgot_password";
+	}
+	
+	@PostMapping("/send-OTP")
+	public String sendOTP(@RequestParam String email, HttpSession session)
+	{
+		int OTP = randomOTP.nextInt(999999);
+		System.out.println(email);
+		System.out.println(OTP);
+		String subject = "OTP from Smart Contacts Manager";
+		String message = "<h2>"+OTP+"</h2>";
+		boolean emailFlag = emailService.sendEmail(subject, message, email);
+		
+		if(emailFlag) {
+			session.setAttribute("OTP",OTP);
+			session.setAttribute("message10","OTP sent successfully!");
+			return "verify_OTP";
+		}
+		
+		session.setAttribute("message10","Invalid Email ID, Please retry again!");
+		return "redirect:/forgot-password";
+	}
+	
+	@PostMapping("/verify-OTP")
+	public String verifyOTP()
+	{
+		return "";
 	}
 }
