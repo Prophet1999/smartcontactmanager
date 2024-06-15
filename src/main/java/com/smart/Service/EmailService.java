@@ -51,12 +51,12 @@ public class EmailService {
 			//mail.setText(message);
 			
 			// sending text messages with attachments
-			String path="C:\\Users\\himanshu.patel\\Pictures\\Saved Pictures\\download.jpg";
+			String path="C:\\Users\\himanshu.patel\\Pictures\\Saved Pictures\\SCM logo.jpg";
 			File file=new File(path);
 			MimeMultipart mimeMultipart=new MimeMultipart();
 			MimeBodyPart textMime=new MimeBodyPart();
 			MimeBodyPart fileMime=new MimeBodyPart();
-			textMime.setText(message);
+			textMime.setContent(message,"text/html");
 			fileMime.attachFile(file);
 			mimeMultipart.addBodyPart(textMime);
 			mimeMultipart.addBodyPart(fileMime);

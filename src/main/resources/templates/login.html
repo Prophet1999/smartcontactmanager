@@ -34,6 +34,14 @@ th:replace="base::layout(~{::section})">
                   You have been successfully logged out!
                   </div>
                   
+                  <div th:if="${param.message}" class="alert alert-success text-center">
+					  <p th:text="${param.message}"></p>
+                  </div>
+                  
+                  <div th:if="${param.message2}" class="alert alert-info text-center">
+					  <p th:text="${param.message2}"></p>
+                  </div>
+                  
                   <h5 class="fw-normal mb-3 pb-3" style="letter-spacing: 1px;"><i>Sign into your account</i></h5>
 
                   <div class="form-outline mb-4">

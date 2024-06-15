@@ -21,14 +21,15 @@ th:replace="base::layout(~{::section})">
             <div class="col-md-6 col-lg-7 mt-5 align-items-center text-center">
 			<h3 class="mt-5">Enter Recieved OTP:</h3>
 
-			<div th:if="${session.message10}" 
-			class="alert alert-success text-center" role="alert">
-			<h3><p th:text="${session.message10}"/></h3>
+			<div th:if="${session.message11}" th:classappend="${session.message11.type}" 
+			class="alert text-center" role="alert">
+			<h3><p th:text="${session.message11.content}"/></h3>
+			<!--<th:block th:text="${#session.removeAttribute('message')}" ></th:block>-->
 			</div>
 	
               <div class="card-body p-4 p-lg-5 text-black">
 
-                <form th:action="@{/verify-OTP}" method="post">
+                <form th:action="@{/verify-OTP}" th:method="post">
 				<div class="container form-group">
 				<input type="number" class="form-control" name="OTP" required placeholder="Enter OTP">
 					</div>
@@ -36,6 +37,13 @@ th:replace="base::layout(~{::section})">
 				<button type="submit" class="btn btn-outline-success">Verify OTP</button>
 				</div>
                 </form>
+                
+                <form th:action="@{/send-OTP}" th:method="post">
+				<div class="container form-group mt-4">
+				<input type="hidden" class="form-control" name="email" th:value="' '+${session.sessionEmail}+' '" required placeholder="Enter email">
+                <button type="submit" class="small text-muted btn btn-link">Resend OTP</button>
+				</div>
+				</form>
 
               </div>
             </div>

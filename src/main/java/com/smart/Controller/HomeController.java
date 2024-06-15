@@ -32,6 +32,9 @@ public class HomeController {
 	@Autowired
 	private EmailService emailService;
 	
+	@Autowired
+	private BCryptPasswordEncoder bCryptPasswordEncoder;
+	
 	Random randomOTP = new Random(1000);
 	
 	@GetMapping("/")
@@ -125,25 +128,71 @@ public class HomeController {
 	public String sendOTP(@RequestParam String email, HttpSession session)
 	{
 		int OTP = randomOTP.nextInt(999999);
-		System.out.println(email);
+		System.out.println(email.trim());
 		System.out.println(OTP);
 		String subject = "OTP from Smart Contacts Manager";
-		String message = "<h2>"+OTP+"</h2>";
-		boolean emailFlag = emailService.sendEmail(subject, message, email);
+		String message = "<div style='border:1px solid #e2e2e2; padding:20px;'>"
+				+ "<h2>OTP is <b>"+OTP+"</b></h2></div>";
+		boolean emailFlag = emailService.sendEmail(subject, message, email.trim());
 		
 		if(emailFlag) {
-			session.setAttribute("OTP",OTP);
-			session.setAttribute("message10","OTP sent successfully!");
-			return "verify_OTP";
+			session.setAttribute("sessionOTP",OTP);
+			session.setAttribute("sessionEmail",email.trim());
+			if(email.contains(" "))
+				session.setAttribute("message11",new Message("OTP was resent!","alert-success"));
+			else session.setAttribute("message11",new Message("OTP sent successfully!","alert-success"));
+			return "redirect:/verify-OTP";
 		}
 		
 		session.setAttribute("message10","Invalid Email ID, Please retry again!");
 		return "redirect:/forgot-password";
 	}
 	
-	@PostMapping("/verify-OTP")
-	public String verifyOTP()
+	@GetMapping("/verify-OTP")
+	public String verifyOTP(HttpSession session)
 	{
-		return "";
+		System.out.println(session.getAttribute("sessionOTP"));
+		System.out.println(session.getAttribute("sessionEmail"));
+		return "verify_OTP";
+	}
+	
+	@PostMapping("/verify-OTP")
+	public String verifyOTP(@RequestParam("OTP") int OTP, HttpSession session)
+	{
+		try {
+		int sessionOTP = (int)session.getAttribute("sessionOTP");
+		String sessionEmail = (String)session.getAttribute("sessionEmail");
+		
+		if(sessionOTP==OTP) {
+			if(ser.fetchUser(sessionEmail)==null)
+				return "redirect:/signin?message2=No user found, please try with different email!";
+			else return "redirect:/password-change";
+		}
+		else session.setAttribute("message11",new Message("Invalid OTP entered, Authentication failed!","alert-danger"));	
+		return "verify_OTP";  
+		}
+		catch(Exception e)
+		{
+			System.out.println(e.getMessage());
+			session.setAttribute("message11",new Message("Something went wrong!","alert-danger"));				
+		}
+		return "verify_OTP";
+	}
+	
+	@GetMapping("/password-change")
+	public String changePassword()
+	{
+		return "password_change_form";
+	}
+	
+	@PostMapping("/password-change")
+	public String changePassword(@RequestParam String newPassword, 
+			HttpSession session)
+	{
+		String sessionEmail=(String)session.getAttribute("sessionEmail");
+		User user = ser.fetchUser(sessionEmail);
+		user.setPassword(bCryptPasswordEncoder.encode(newPassword));
+		ser.insertUser(user);
+		return "redirect:/signin?message=Password changed successfully!";
 	}
 }

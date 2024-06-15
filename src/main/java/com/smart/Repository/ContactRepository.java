@@ -12,7 +12,6 @@ import org.springframework.stereotype.Repository;
 import com.smart.Entities.Contact;
 import com.smart.Entities.User;
 
-@Repository
 public interface ContactRepository extends JpaRepository<Contact,Integer>{
 
 	@Query("from Contact c where c.user.id=:uid")
