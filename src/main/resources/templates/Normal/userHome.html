@@ -14,7 +14,14 @@ th:replace="Normal/dashboard::layout(~{::section})">
 	we provide very efficient and smarter way of handling contacts.</p>
 	<div class="alert alert-success">Welcome 
 	<h4 th:text="${user.name}"></h4><b><i>You are successfully logged in!!!</i></b></div>
-	<a th:href="@{/user/add-contact}"><button class="btn btn-info btn-block form-control">Add to Cloud</button></a>
+	<a th:href="@{/user/add-contact}"><button class="btn btn-info btn-block form-control">Add new contact</button></a>
+	
+	<div class="container form-group my-3 mt-4">
+	<h3>Donate us</h3>
+	<input type="number" id="payment_field" class="form-control" placeholder="Enter amount here">
+	<button onClick="paymentStart()" class="btn btn-success btn-block mt-3 form-control">PAY</button>
+	</div>
+	
 	</div>
 	
 	<script>

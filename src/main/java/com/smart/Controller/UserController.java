@@ -8,8 +8,11 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
 import java.security.Principal;
+import java.util.Map;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
@@ -22,8 +25,10 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.smart.Entities.Contact;
@@ -35,9 +40,19 @@ import com.smart.Service.UserService;
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
+
 @Controller
 @RequestMapping("/user")
 public class UserController {
+	
+	@Value("${API_KEY_ID}")
+	private String apiKeyId;
+	
+	@Value("${API_SECRET_KEY}")
+	private String apiSecretKey;
 	
 	@Autowired
 	private UserService userSer;
@@ -49,7 +64,7 @@ public class UserController {
 	private BCryptPasswordEncoder passwordEncoder;
 	
 	@ModelAttribute
-	public void addCommonData(Model m,Principal p)
+	public void addCommonData(Model m, Principal p)
 	{
 		m.addAttribute("user",userSer.fetchUser(p.getName()));
 	}
@@ -324,4 +339,29 @@ public class UserController {
 		return "redirect:/user/index";
 	}
 	
+	// create order for payment
+	@PostMapping("/create_order")
+	@ResponseBody
+	public String createOrder(@RequestBody Map<String,Object>data) throws RazorpayException
+	{
+		System.out.println("Order function executed");
+		System.out.println(data);
+		
+		if(apiKeyId==null || apiKeyId.isEmpty() || 
+				apiSecretKey==null || apiSecretKey.isEmpty())
+			return "Secret gateway key missing...";
+		
+		int amount = Integer.parseInt(data.get("amount").toString().trim());
+		var client = new RazorpayClient(apiKeyId,apiSecretKey);
+		
+		JSONObject options = new JSONObject();
+		options.put("amount",amount*100);
+		options.put("currency","INR");
+		options.put("receipt","txn_235425");
+
+		//creating new order
+		Order order = client.Orders.create(options);
+		System.out.println(order);
+		return "{\"apiKeyId\":\""+apiKeyId+"\","+order.toString().substring(1);
+	}
 }
