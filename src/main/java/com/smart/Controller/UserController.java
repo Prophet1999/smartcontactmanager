@@ -48,10 +48,10 @@ import com.razorpay.RazorpayException;
 @RequestMapping("/user")
 public class UserController {
 	
-	@Value("${API_KEY_ID}")
+	@Value("${API_KEY_ID:#{null}}")
 	private String apiKeyId;
 	
-	@Value("${API_SECRET_KEY}")
+	@Value("${API_SECRET_KEY:#{null}}")
 	private String apiSecretKey;
 	
 	@Autowired
@@ -349,7 +349,7 @@ public class UserController {
 		
 		if(apiKeyId==null || apiKeyId.isEmpty() || 
 				apiSecretKey==null || apiSecretKey.isEmpty())
-			return "Secret gateway key missing...";
+			return "\"404_Not_Found\":\"Payment-API-key\"";
 		
 		int amount = Integer.parseInt(data.get("amount").toString().trim());
 		var client = new RazorpayClient(apiKeyId,apiSecretKey);

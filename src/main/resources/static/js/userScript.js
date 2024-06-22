@@ -109,7 +109,7 @@ const paymentStart=()=>{
 				//invoked when error
 				console.error("Error Status:",textStatus+"\n"+errorThrown);
 				console.log("Response Text:",jqXHR.responseText);
-				alert("OOPs! Something went wrong...")
+				swal("OOPs! Something went wrong...",jqXHR.responseText,"error");
 			}
 		})
 	}
