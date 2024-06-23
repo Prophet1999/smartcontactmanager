@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -20,7 +21,6 @@ import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
@@ -64,9 +64,16 @@ public class ContactController {
 		}
 		else {
 			if(!contact.getImage().equals("default.webp")) {
+			try {
 			File file=new ClassPathResource("static/images").getFile();
 			Path path=Paths.get(file.getAbsolutePath()+File.separator+contact.getImage());
 			Files.delete(path);
+				}
+			catch(NoSuchFileException e)
+				{
+				   e.printStackTrace();
+				   System.out.println("ERROR: Contact profile image not found...");
+				}
 			}
 			contact.setUser(null);
 			conSer.deleteContact(contact);
@@ -111,6 +118,7 @@ public class ContactController {
 				return "Normal/update_contact";
 			}
 			
+			try {
 			if(!file.isEmpty())
 			{
 				File FileLoc=new ClassPathResource("static/images").getFile();
@@ -140,6 +148,12 @@ public class ContactController {
 				contact.setImage(Email+imgName);
 			}
 			else contact.setImage(pastImage);
+			}
+			catch(NoSuchFileException e)
+			{
+			   e.printStackTrace();
+			   System.out.println("ERROR: Cannot update profile image...");
+			}
 			
 			contact.setUser(userSer.fetchUser(p.getName()));
 			conSer.insertContact(contact);

@@ -31,9 +31,12 @@ const search=()=>{
 			return contacts.json();
 		}).then((data)=>{
 			let text=`<div class="list-group">`;
+			if(data.length>0){
 			data.forEach(contact => {
 				text+=`<a href="/smartcontacts/user/contact/${contact.cid}" class="list-group-item list-group-item-check">${contact.name}</a>`
 			});
+			}
+			else text+=`<h6 class="list-group-item list-group-item-check text-danger">No results found</h6>`
 			text+=`</div>`;
 			$(".search-result").html(text);
 		})

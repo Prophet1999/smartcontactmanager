@@ -2,82 +2,71 @@ package com.smart.Service;
 
 import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
 
-import javax.mail.Authenticator;
-import javax.mail.Message;
-import javax.mail.MessagingException;
-import javax.mail.PasswordAuthentication;
-import javax.mail.Session;
-import javax.mail.Transport;
-import javax.mail.internet.InternetAddress;
-import javax.mail.internet.MimeBodyPart;
-import javax.mail.internet.MimeMessage;
-import javax.mail.internet.MimeMultipart;
+import jakarta.mail.Message;
+import jakarta.mail.MessagingException;
+import jakarta.mail.internet.AddressException;
+import jakarta.mail.internet.InternetAddress;
+import jakarta.mail.internet.MimeBodyPart;
+import jakarta.mail.internet.MimeMessage;
+import jakarta.mail.internet.MimeMultipart;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.core.io.ClassPathResource;
+import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
 
 @Service
+@Lazy
 public class EmailService {
-	public boolean sendEmail(String subject,String message,String to)
-	{
-		// get system properties
-		Properties properties=System.getProperties();
-		String host="smtp.gmail.com";
-		properties.put("mail.smtp.host",host);
-		properties.put("mail.smtp.port","465");
-		properties.put("mail.smtp.ssl.enable","true");
-		properties.put("mail.smtp.auth","true");
-		String from = "hppatel1235@gmail.com";
-		String password="vfivjkybwheztnbk";
-		
-		try {
-			// get current session
-			Session session=Session.getInstance(properties,new Authenticator() {
+	
+	@Lazy
+	@Autowired
+	private JavaMailSenderImpl mailSender;
+	
+	@Value("${mail.subject}:#{null}")
+	private String mail_subject;
+	
+	public boolean sendEmail(String message,String to) throws IOException, AddressException, MessagingException{
 
-				@Override
-				protected PasswordAuthentication getPasswordAuthentication() {
-				return new PasswordAuthentication(from,password);
-				}
-			});
-			session.setDebug(true);
+			MimeMessage msg = mailSender.createMimeMessage();
+			File imagePath=new ClassPathResource("static/images").getFile();
+			String path=imagePath.getAbsolutePath()+File.separator+"SCM logo.jpg";
 			
-			// compose the message
-			MimeMessage mail=new MimeMessage(session);
-			mail.setFrom(from);
-			mail.addRecipient(Message.RecipientType.TO,new InternetAddress(to));
-			
-			// sending text messages
-			//mail.setText(message);
-			
-			// sending text messages with attachments
-			String path="C:\\Users\\himanshu.patel\\Pictures\\Saved Pictures\\SCM logo.jpg";
-			File file=new File(path);
-			MimeMultipart mimeMultipart=new MimeMultipart();
-			MimeBodyPart textMime=new MimeBodyPart();
-			MimeBodyPart fileMime=new MimeBodyPart();
+			msg.setFrom(new InternetAddress("no-reply-OTP@scm.org"));
+			setMailRecipients(msg, to);
+			msg.setSubject(mail_subject);
+						
+			MimeMultipart multipart = new MimeMultipart();
+			MimeBodyPart textMime = new MimeBodyPart();
 			textMime.setContent(message,"text/html");
-			fileMime.attachFile(file);
-			mimeMultipart.addBodyPart(textMime);
-			mimeMultipart.addBodyPart(fileMime);
-			mail.setContent(mimeMultipart);
+			MimeBodyPart fileMime=new MimeBodyPart();
+			fileMime.attachFile(new File(path));
+			multipart.addBodyPart(textMime);
+			multipart.addBodyPart(fileMime);
 			
-			mail.setSubject(subject);
-			
-			// sending the mail
-			Transport.send(mail);
+			msg.setContent(multipart);
+			mailSender.send(msg);
+			System.out.println("Email Sent!!");
+	     
+	     return true;
+}
+
+	private void setMailRecipients(MimeMessage msg, String TO_EMAIL) throws MessagingException, AddressException {
+		if (TO_EMAIL!=null && !TO_EMAIL.isEmpty()){
+			int length = TO_EMAIL.split(",").length;
+			for(int i=0;i<=length-1;i++){
+
+				String toAddresses=TO_EMAIL.split(",")[i];
+				if ((!(toAddresses==null))||(!(toAddresses==""))){	
+					msg.addRecipient(Message.RecipientType.TO, new InternetAddress(toAddresses));
+				}
+			}
 		}
-		catch(MessagingException e) {
-			System.out.println("ERROR: "+e.getMessage());
-			e.printStackTrace();
-			return false;
+		else{
+			System.out.println("Mail - To address not set . mail cannot be sent");
 		}
-		catch(IOException e) {
-			System.out.println("ERROR: "+e.getMessage());
-			e.printStackTrace();
-			return false;
-		}
-		
-		return true;
 	}
 }

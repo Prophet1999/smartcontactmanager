@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
+import java.nio.file.NoSuchFileException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
@@ -107,6 +108,7 @@ public class UserController {
 				return "Normal/add_contact_form";
 			}
 			
+			try {
 			if(file.isEmpty())
 					contact.setImage("default.webp");
 			else{
@@ -114,6 +116,12 @@ public class UserController {
 				File saveFile=new ClassPathResource("static/images").getFile();
 				Path path=Paths.get(saveFile.getAbsolutePath()+File.separator+contact.getEmail()+file.getOriginalFilename());
 				Files.copy(file.getInputStream(),path,StandardCopyOption.REPLACE_EXISTING);
+				}
+			}
+			catch(NoSuchFileException e)
+			{
+			   e.printStackTrace();
+			   System.out.println("ERROR: Cannot process contact profile image...");
 			}
 				
 		User user=userSer.fetchUser(p.getName());
@@ -206,7 +214,7 @@ public class UserController {
 	@PostMapping("/updateUser")
 	public String processUpdate(@Valid @ModelAttribute User user,
 			BindingResult result,@RequestParam("profileImage") MultipartFile file,
-			Model m,HttpSession session,Principal p)
+			HttpSession session,Principal p)
 	{
 		User pastUser=userSer.fetchUser(p.getName());
 		System.out.println(p.getName());
@@ -224,6 +232,7 @@ public class UserController {
 				return "Normal/update_user";
 			}
 			
+			try {
 			if(!file.isEmpty())
 			{
 				File FileLoc=new ClassPathResource("static/images").getFile();
@@ -253,6 +262,12 @@ public class UserController {
 				user.setImageUrl(Email+imgName);
 			}
 			else user.setImageUrl(pastImage);
+			}
+			catch(NoSuchFileException e)
+			{
+			   e.printStackTrace();
+			   System.out.println("ERROR: Cannot update user profile image...");
+			}
 			
 			userSer.insertUser(user);
 			session.setAttribute("message7",new Message("User successfully updated!","alert-success"));
@@ -281,16 +296,23 @@ public class UserController {
 		session.setAttribute("message8",new Message("No such User found!","alert-warning"));
 		else {
 			if(!user.getImageUrl().equals("default.png")) {
+			try {
 			File file=new ClassPathResource("static/images").getFile();
 			Path path=Paths.get(file.getAbsolutePath()+File.separator+user.getImageUrl());
 			Files.delete(path);
 			}
+			catch(NoSuchFileException e)
+			{
+				e.printStackTrace();
+				System.out.println("Error: User profile image not found...");
+			}
+		}
 		
 		conSer.eraseUserContacts(uid);
 		userSer.deleteUser(user);
 		session.setAttribute("message8",new Message("Contact successfully deleted!","alert-success"));
 		}
-		}
+	}
 		catch(Exception e)
 		{
 			System.out.println("ERROR: "+e.getMessage());
@@ -301,8 +323,9 @@ public class UserController {
 	}
 	
 	@GetMapping("/{uid}/settings")
-	public String settings()
+	public String settings(Model m)
 	{
+		m.addAttribute("title","Settings - Smart Contacts Manager");
 		return "Normal/userSettings";
 	}
 	

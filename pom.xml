@@ -92,12 +92,25 @@
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/com.sun.mail/javax.mail -->
-		<dependency>
+		<!-- https://mvnrepository.com/artifact/com.sun.mail/jakarta.mail -->
+		<!--<dependency>
 		    <groupId>com.sun.mail</groupId>
-		    <artifactId>javax.mail</artifactId>
-		    <version>1.6.2</version>
-		</dependency>
+		    <artifactId>jakarta.mail</artifactId>
+		    <version>2.0.1</version>
+		</dependency>-->
+
+		<!-- https://mvnrepository.com/artifact/org.springframework.boot/spring-boot-starter-mail -->
+		<!--<dependency>
+		    <groupId>org.springframework.boot</groupId>
+		    <artifactId>spring-boot-starter-mail</artifactId>
+		</dependency>-->
 		
+		<!-- https://mvnrepository.com/artifact/org.springframework/spring-context-support -->
+		<!--<dependency>
+		    <groupId>org.springframework</groupId>
+		    <artifactId>spring-context-support</artifactId>
+		</dependency>-->
+
 		<!--imported as an external jar-->
 		<!--<dependency>
 		 <groupId>com.razorpay</groupId>

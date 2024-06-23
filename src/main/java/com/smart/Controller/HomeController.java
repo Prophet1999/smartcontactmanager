@@ -119,21 +119,22 @@ public class HomeController {
 	}
 	
 	@GetMapping("/forgot-password")
-	public String forgotPassword()
+	public String forgotPassword(Model m)
 	{
+		m.addAttribute("title","Forgot Password - Smart Contacts Manager");
 		return "forgot_password";
 	}
 	
 	@PostMapping("/send-OTP")
 	public String sendOTP(@RequestParam String email, HttpSession session)
 	{
+		try {
 		int OTP = randomOTP.nextInt(999999);
 		System.out.println(email.trim());
 		System.out.println(OTP);
-		String subject = "OTP from Smart Contacts Manager";
 		String message = "<div style='border:1px solid #e2e2e2; padding:20px;'>"
 				+ "<h2>OTP is <b>"+OTP+"</b></h2></div>";
-		boolean emailFlag = emailService.sendEmail(subject, message, email.trim());
+		boolean emailFlag = emailService.sendEmail(message, email.trim());
 		
 		if(emailFlag) {
 			session.setAttribute("sessionOTP",OTP);
@@ -145,14 +146,18 @@ public class HomeController {
 		}
 		
 		session.setAttribute("message10","Invalid Email ID, Please retry again!");
+		}catch(Exception e)
+		{
+			e.printStackTrace();
+			session.setAttribute("message10","OOPS! Something went wrong, please try again later");
+		}
 		return "redirect:/forgot-password";
 	}
 	
 	@GetMapping("/verify-OTP")
-	public String verifyOTP(HttpSession session)
+	public String verifyOTP(HttpSession session, Model m)
 	{
-		System.out.println(session.getAttribute("sessionOTP"));
-		System.out.println(session.getAttribute("sessionEmail"));
+		m.addAttribute("title","Verify OTP - Smart Contacts Manager");
 		return "verify_OTP";
 	}
 	
@@ -169,7 +174,7 @@ public class HomeController {
 			else return "redirect:/password-change";
 		}
 		else session.setAttribute("message11",new Message("Invalid OTP entered, Authentication failed!","alert-danger"));	
-		return "verify_OTP";  
+		return "redirect:/verify-OTP";  
 		}
 		catch(Exception e)
 		{
@@ -180,8 +185,9 @@ public class HomeController {
 	}
 	
 	@GetMapping("/password-change")
-	public String changePassword()
+	public String changePassword(Model m)
 	{
+		m.addAttribute("title","Password Change - Smart Contacts Manager");
 		return "password_change_form";
 	}
 	
