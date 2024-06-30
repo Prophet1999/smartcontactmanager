@@ -18,6 +18,7 @@ import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -34,6 +35,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import com.smart.Entities.Contact;
 import com.smart.Entities.User;
+import com.smart.Entities.LocalOrder;
 import com.smart.Helper.Message;
 import com.smart.Service.ContactService;
 import com.smart.Service.UserService;
@@ -365,7 +367,7 @@ public class UserController {
 	// create order for payment
 	@PostMapping("/create_order")
 	@ResponseBody
-	public String createOrder(@RequestBody Map<String,Object>data) throws RazorpayException
+	public String createOrder(@RequestBody Map<String,Object>data, Principal principal) throws RazorpayException
 	{
 		System.out.println("Order function executed");
 		System.out.println(data);
@@ -385,6 +387,27 @@ public class UserController {
 		//creating new order
 		Order order = client.Orders.create(options);
 		System.out.println(order);
+		
+		//save the order in DB
+		LocalOrder localOrder = new LocalOrder();
+		localOrder.setOrderId(order.get("id"));
+		localOrder.setAmount(Integer.divideUnsigned(order.get("amount"),100));
+		localOrder.setStatus(order.get("status"));
+		localOrder.setReciept(order.get("receipt"));
+		localOrder.setUser(userSer.fetchUser(principal.getName()));
+
+		userSer.insertOrder(localOrder);
+		
 		return "{\"apiKeyId\":\""+apiKeyId+"\","+order.toString().substring(1);
+	}
+	
+	@PostMapping("/update_order")
+	public ResponseEntity<?> updateOrder(@RequestBody Map<String, Object> data)
+	{
+		LocalOrder order = userSer.fetchOrder(data.get("order_id").toString());
+		order.setPaymentId(data.get("payment_id").toString());
+		order.setStatus(data.get("status").toString());
+		userSer.insertOrder(order);
+		return ResponseEntity.ok(Map.of("msg","Order was updated to paid."));
 	}
 }

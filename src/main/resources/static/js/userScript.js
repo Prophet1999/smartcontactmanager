@@ -78,7 +78,7 @@ const paymentStart=()=>{
 							console.log(response.razorpay_payment_id);
 							console.log(response.razorpay_order_id);
 							console.log(response.razorpay_signature);
-							swal("Payment success!", "Thanks for your contribution!", "success");
+							updatePaymentDetails(response.razorpay_payment_id, response.razorpay_order_id, "paid");
 						},
 						"prefill": { //Recommend using the prefill parameter to auto-fill customer's contact information especially their phone number
        					  "name": "", //Customer's name
@@ -116,4 +116,20 @@ const paymentStart=()=>{
 			}
 		})
 	}
+}
+
+function updatePaymentDetails(payment_id, order_id, order_status){
+	$.ajax({
+			url:'/smartcontacts/user/update_order',
+			data:JSON.stringify({payment_id:payment_id,order_id:order_id,status:order_status}),
+			contentType:'application/json',
+			type:'POST',
+			dataType:'json',
+			success:function(){
+			swal("Payment success!", "Thanks for your contribution!", "success");
+			},
+			error:function(){
+			swal("Payment capture status failed!", "Payment was successful, but we failed to capture it.\n Next steps - we will contact you regarding further info for the same", "info");
+			}
+	});
 }
