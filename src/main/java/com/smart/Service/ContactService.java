@@ -27,6 +27,11 @@ public class ContactService {
 	{
 		return repo.getContactsByUsername(username,pageable);
 	}
+	
+	public List<Contact>fetchAllContacts(String username)
+	{
+		return repo.getAllContactsByUsername(username);
+	}
 
 	public Contact fetchById(int cid) {
 		Optional<Contact>contact=repo.findById(cid);

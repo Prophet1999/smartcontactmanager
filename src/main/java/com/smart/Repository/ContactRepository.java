@@ -19,6 +19,9 @@ public interface ContactRepository extends JpaRepository<Contact,Integer>{
 	@Query("from Contact c where c.user.email=:username")
 	public Page<Contact> getContactsByUsername(@Param("username") String username,Pageable pageable);
 	
+	@Query("from Contact c where c.user.email= ?1")
+	public List<Contact> getAllContactsByUsername(String username);
+	
 	@Query("from Contact c where c.user.uid=:uid")
 	public void deleteAllById(@Param("uid") int id);
 	
