@@ -162,7 +162,7 @@ public class HomeController {
 	}
 	
 	@PostMapping("/verify-OTP")
-	public String verifyOTP(@RequestParam("OTP") int OTP, HttpSession session)
+	public String verifyOTP(@RequestParam int OTP, HttpSession session)
 	{
 		try {
 		int sessionOTP = (int)session.getAttribute("sessionOTP");

@@ -37,10 +37,10 @@ public class SecurityConfig{
 	
 	@Value("${mail.password}")
 	private String mail_password;
-	
-	@Lazy
-	@Bean
-	public JavaMailSenderImpl mailSender()
+
+    @Lazy
+    @Bean
+    JavaMailSenderImpl mailSender()
 	{
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		Properties properties=mailSender.getJavaMailProperties();
@@ -53,51 +53,49 @@ public class SecurityConfig{
 		mailSender.setJavaMailProperties(properties);
 		return mailSender;
 	}
-	
-	@Bean
-	public BCryptPasswordEncoder getEncoder()
+
+    @Bean
+    BCryptPasswordEncoder getEncoder()
 	{
 		return new BCryptPasswordEncoder();
 	}
-	
-	@Bean
-	public UserDetailsService getDetails()
+
+    @Bean
+    UserDetailsService getDetails()
 	{
 		return new UserDetailsServiceImpl();
 	}
-	
-	@Bean
-	public DaoAuthenticationProvider getProvider()
+
+    @Bean
+    DaoAuthenticationProvider getProvider()
 	{
 		DaoAuthenticationProvider provider=new DaoAuthenticationProvider();
 		provider.setUserDetailsService(getDetails());
 		provider.setPasswordEncoder(getEncoder());
 		return provider;
 	}
-	
-	@Bean
-	public AuthenticationManager authenticationManager
-	(AuthenticationConfiguration config) throws Exception
+
+    @Bean
+    AuthenticationManager authenticationManager
+            (AuthenticationConfiguration config) throws Exception
 	{
 		return config.getAuthenticationManager();
 	}
-	
+
+	@SuppressWarnings("removal")
 	@Bean
-	public SecurityFilterChain getFilter(HttpSecurity http) throws Exception
+    SecurityFilterChain getFilter(HttpSecurity http) throws Exception
 	{
-		http.authorizeHttpRequests()
-        .requestMatchers("/admin/**").hasRole("ADMIN")
-        .requestMatchers("/user/**").hasRole("USER")
-        .requestMatchers("/**").permitAll()
-        .and()
-        .formLogin()
-        .loginPage("/signin")
-        .loginProcessingUrl("/doLogin")
-        .defaultSuccessUrl("/user/index")
-        //.failureUrl("/login-fail")
-        .and()
-        .csrf().disable().cors().disable();
-		http.headers().cacheControl().disable();
+        http.authorizeHttpRequests(requests -> requests
+                .requestMatchers("/admin/**").hasRole("ADMIN")
+                .requestMatchers("/user/**").hasRole("USER")
+                .requestMatchers("/**").permitAll())
+                .formLogin(login -> login
+                        .loginPage("/signin")
+                        .loginProcessingUrl("/doLogin")
+                        .defaultSuccessUrl("/user/index"))
+                .csrf(csrf -> csrf.disable()).cors(cors -> cors.disable());
+        http.headers(headers -> headers.cacheControl().disable());
     return http.build();
 	}
 	

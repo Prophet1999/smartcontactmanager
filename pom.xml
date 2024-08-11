@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
-		<version>3.0.4</version>
+		<version>3.3.2</version>
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>smartcontacts</groupId>
@@ -128,7 +128,6 @@
 		<dependency>
 		    <groupId>com.squareup.okhttp3</groupId>
 		    <artifactId>okhttp</artifactId>
-		    <version>4.11.0</version>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/com.squareup.okio/okio -->
@@ -151,7 +150,6 @@
 		<dependency>
 		    <groupId>org.jetbrains.kotlin</groupId>
 		    <artifactId>kotlin-stdlib</artifactId>
-		    <version>1.6.20</version>
 		</dependency>
 		
 		<!-- https://mvnrepository.com/artifact/org.apache.commons/commons-text -->
@@ -165,7 +163,6 @@
 		<dependency>
 		    <groupId>com.squareup.okhttp3</groupId>
 		    <artifactId>logging-interceptor</artifactId>
-		    <version>4.10.0</version>
 		</dependency>
 
 		
