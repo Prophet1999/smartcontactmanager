@@ -37,36 +37,33 @@ public class FileUploadHelper {
 			while(rows.hasNext()) {
 				Contact contact = new Contact();
 				Row row = rows.next();
-				int cellNum = 0;
 				if(rowNum>0) {
 					Iterator<Cell> cells = row.iterator();
 					while(cells.hasNext()) {
 						Cell cell = cells.next();
-						switch(cellNum)
+						switch(cell.getColumnIndex())
 						{
-						case 0: contact.setCid((int)cell.getNumericCellValue());
-							break;
+						case 0:contact.setDescription(cell.getStringCellValue());
+						break;
 						case 1:contact.setEmail(cell.getStringCellValue());
-							break;
+						break;
 						case 2:contact.setName(cell.getStringCellValue());
-							break;
+						break;
 						case 3:contact.setNickName(cell.getStringCellValue());
-							break;
-						case 4:contact.setPhone(cell.getStringCellValue());
-							break;
+						break;
+						case 4:contact.setPhone(String.format("%.0f", cell.getNumericCellValue()).substring(0,10));
+						break;
 						case 5:contact.setWork(cell.getStringCellValue());
-							break;
-						case 6:contact.setDescription(cell.getStringCellValue());
-							break;
+						break;
 						default: break;
 						}
-						cellNum++;
 					}
+					
+					contact.setImage("default.webp");
+					contact.setUser(user);
+					contacts.add(contact);
 				}
 				rowNum++;
-				contact.setImage(new ClassPathResource("static/images")+File.separator+"default.webp");
-				contact.setUser(user);
-				contacts.add(contact);
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

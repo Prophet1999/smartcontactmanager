@@ -117,6 +117,19 @@ th:replace="Normal/dashboard::layout(~{::section})">
 	</div>
 	
 	</form>
+	<h1><small class="text-muted">OR</small></h1>
+	<form class="form-control mt-2">
+	
+	<h3><small class="text-primary">Upload Bulk Contacts In EXCEL</small></h3>
+    <div class="container text-center form-group mt-3">
+    <input type="file" class="form-control" id="contactsFileInput"/>
+    <div class="form-group mt-3">
+    <button id="contactsUploadBtn" type="button" class="btn btn-outline-primary">Upload</button>
+    <button type="reset" class="btn btn-outline-danger">Reset</button>
+	</div>
+	</div>
+	</form>
+
 	</div>
 	</div>
 	</div>
@@ -124,6 +137,11 @@ th:replace="Normal/dashboard::layout(~{::section})">
 	</div>
 	
 	<script>
+	
+	$(document).ready(function(){
+		uploadContactsFile();
+	});
+	
       tinymce.init({
         selector: '#TinyMCE'
       });

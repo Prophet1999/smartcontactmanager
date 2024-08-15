@@ -1,6 +1,7 @@
 package com.smart.Service;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,12 +19,14 @@ public class FileUploadService {
 	@Autowired
 	private ContactRepository conRepo;
 	
-	public void insertFileToDB(MultipartFile file, User user) {
+	public List<Contact> insertFileToDB(MultipartFile file, User user) {
 		try {
-			conRepo.saveAll(FileUploadHelper.extractContactListFromFile(file.getInputStream(), user));
+			return conRepo.saveAll(FileUploadHelper.extractContactListFromFile(file.getInputStream(), user));
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		
+		return new ArrayList<Contact>();
 	}
 	
 	public List<Contact> fetchAllFileStoredContacts(){

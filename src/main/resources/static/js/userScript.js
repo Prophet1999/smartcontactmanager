@@ -133,3 +133,37 @@ function updatePaymentDetails(payment_id, order_id, order_status){
 			}
 	});
 }
+
+function uploadContactsFile() {
+          $('#contactsUploadBtn').on('click', function() {
+              const fileInput = $('#contactsFileInput')[0];
+              const file = fileInput.files[0];
+              const formData = new FormData();
+
+              if (!file)
+				  swal("No file found!", "Please select a file to upload...", "info");
+              else{
+
+              formData.append('contactsFile', file);
+
+              $.ajax({
+                  url: '/smartcontacts/user/upload-file',
+                  type: 'POST',
+                  data: formData,
+                  processData: false,
+                  contentType: false,
+				  success: function(response, status, xhr) {
+					if (xhr.status === 204)
+					    swal("Upload successful!", "No records found in the input file...", "warning");
+					else 
+					    swal("Upload successful!", response, "success");		   
+				  },
+				  error: function(xhr, status, error) {
+	                  //console.error(error);
+	                  const errorMessage = xhr.responseText || "Upload failed due to server error.";
+	                  swal("Upload failed!", errorMessage, "error");
+				  }
+              });
+			 }
+          });
+}
