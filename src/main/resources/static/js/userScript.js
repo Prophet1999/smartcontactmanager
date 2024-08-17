@@ -134,33 +134,12 @@ function updatePaymentDetails(payment_id, order_id, order_status){
 	});
 }
 
-function downloadSampleContactFile(){
+function viewSampleContactFile(){
 		$(document).ready(function() {
     	$("#sampleContactsDownloadBtn").on('click', function() {
-			
-		$('#loading-symbol').show();
-		$('#upload-bulk-contacts').hide();
-						  
-        // Data to be included in the Excel file (single row)
-        var data = [
-            ["description", "email", "name", "nickname", "phone", "work"],
-			["Very humble guy","sagar@gmail.com","Sagar","Sagar","9452390567",".Net Developer"]
-        ];
 
-        // Create a new workbook
-        var wb = XLSX.utils.book_new();
-
-        // Convert data array to a worksheet
-        var ws = XLSX.utils.aoa_to_sheet(data);
-
-        // Append the worksheet to the workbook with the name 'contacts'
-        XLSX.utils.book_append_sheet(wb, ws, "contacts");
-
-        // Generate the Excel file and trigger a download
-        XLSX.writeFile(wb, "Contacts.xlsx");
-		
-		$('#loading-symbol').hide();
-		$('#upload-bulk-contacts').show();
+		var url = "https://docs.google.com/spreadsheets/d/1zdXtUMyg2hKt8UwNDhiq4KVsNmmqaXFI/edit?usp=drive_link&ouid=111100391487131452541&rtpof=true&sd=true";
+		window.open(url, '_blank');
     });
 });
 }
