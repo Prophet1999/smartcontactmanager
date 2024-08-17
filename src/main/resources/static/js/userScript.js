@@ -137,6 +137,10 @@ function updatePaymentDetails(payment_id, order_id, order_status){
 function downloadSampleContactFile(){
 		$(document).ready(function() {
     	$("#sampleContactsDownloadBtn").on('click', function() {
+			
+		$('#loading-symbol').show();
+		$('#upload-bulk-contacts').hide();
+						  
         // Data to be included in the Excel file (single row)
         var data = [
             ["description", "email", "name", "nickname", "phone", "work"],
@@ -154,6 +158,9 @@ function downloadSampleContactFile(){
 
         // Generate the Excel file and trigger a download
         XLSX.writeFile(wb, "Contacts.xlsx");
+		
+		$('#loading-symbol').hide();
+		$('#upload-bulk-contacts').show();
     });
 });
 }
