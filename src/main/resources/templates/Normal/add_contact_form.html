@@ -127,6 +127,9 @@ th:replace="Normal/dashboard::layout(~{::section})">
     <button id="contactsUploadBtn" type="button" class="btn btn-outline-primary">Upload</button>
     <button type="reset" class="btn btn-outline-danger">Reset</button>
 	</div>
+	<div class="form-group mt-3">
+	<button id="sampleContactsDownloadBtn" type="button" class="btn btn-info">Download Sample File</button>
+	</div>
 	</div>
 	
 	<div id="loading-symbol" class="container text-center" style="display: none;">
@@ -144,6 +147,7 @@ th:replace="Normal/dashboard::layout(~{::section})">
 	
 	$(document).ready(function(){
 		uploadContactsFile();
+		downloadSampleContactFile();
 	});
 	
       tinymce.init({

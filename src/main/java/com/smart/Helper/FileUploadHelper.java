@@ -49,7 +49,15 @@ public class FileUploadHelper {
 						break;
 						case 3:contact.setNickName(cell.getStringCellValue());
 						break;
-						case 4:contact.setPhone(String.format("%.0f", cell.getNumericCellValue()).substring(0,10));
+						case 4:
+							switch(cell.getCellType()) {
+							case STRING: contact.setPhone(String.format("%.0f", Double.parseDouble(cell.getStringCellValue())).substring(0,10));
+								break;
+							case NUMERIC: contact.setPhone(String.format("%.0f", cell.getNumericCellValue()).substring(0,10));
+								break;
+							default: contact.setPhone("");
+								break;
+							}
 						break;
 						case 5:contact.setWork(cell.getStringCellValue());
 						break;
