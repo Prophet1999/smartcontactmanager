@@ -182,3 +182,38 @@ function uploadContactsFile() {
 			 $('#upload-bulk-contacts').show();
           });
 }
+
+function downloadAllContacts() {
+          $('#allContactsDownloadBtn').on('click', function() {
+			  $('#loading-symbol').show();
+			  $('#allContactsDownloadBtn').hide();
+
+              $.ajax({
+                  url: '/smartcontacts/user/all-contacts',
+                  type: 'POST',
+                  processData: false,
+                  contentType: false,
+				  success: function(response, status, xhr) {
+					
+				   // Create a new workbook and add the worksheet
+				   var wb = XLSX.utils.book_new();
+					
+					// Convert JSON data to worksheet
+				   var ws = XLSX.utils.json_to_sheet(response);
+				   
+				   XLSX.utils.book_append_sheet(wb, ws, "contacts");
+
+				   // Generate a download link and trigger download
+				   XLSX.writeFile(wb, 'Contacts.xlsx');   		   
+				  },
+				  error: function(xhr, status, error) {
+	                  //console.error(error);
+	                  const errorMessage = xhr.responseText || "Upload failed due to server error.";
+	                  swal("Download failed!", errorMessage, "error");
+				  }
+              });
+			 
+			 $('#loading-symbol').hide();
+			 $('#allContactsDownloadBtn').show();
+          });
+}

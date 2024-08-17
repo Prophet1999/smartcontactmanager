@@ -15,6 +15,14 @@ th:replace="Normal/dashboard::layout(~{::section})">
 	<input type="text" onKeyUp="search()" class="form-control" id="search-input" placeholder="Search your contact by name..."/>
 	<div class="search-result" style="z-index: 1;">
 	</div>
+	
+	<div class="form-group mt-3">
+	<button id="allContactsDownloadBtn" type="button" class="btn btn-warning">Download all contacts</button>
+	</div>
+	
+	<div id="loading-symbol" class="container text-center" style="display: none;">
+	<img style="height:100px;width:100px;" th:src="@{/images/loading_symbol.gif}" alt="loading..." />
+	</div>
 	</div>
 	
 	<h2 th:classappend="${session.message3.type}" class="text-center alert" role="alert" th:if="${totalRecords==0}" th:text="${session.message3.content}"></h2>
@@ -110,11 +118,15 @@ th:replace="Normal/dashboard::layout(~{::section})">
 		  </ul>
 		</nav>
 	</div>
-	</div>
 	
 	<script>
 		$('.item').removeClass('active');
 		$('#contacts-link').addClass('active');
+		
+		$(document).ready(function(){
+			downloadAllContacts();
+		});
+		
 	</script>
 	
 	</section>
