@@ -136,6 +136,8 @@ function updatePaymentDetails(payment_id, order_id, order_status){
 
 function uploadContactsFile() {
           $('#contactsUploadBtn').on('click', function() {
+			  $('#loading-symbol').show();
+			  $('#upload-bulk-contacts').hide();
               const fileInput = $('#contactsFileInput')[0];
               const file = fileInput.files[0];
               const formData = new FormData();
@@ -165,5 +167,8 @@ function uploadContactsFile() {
 				  }
               });
 			 }
+			 
+			 $('#loading-symbol').hide();
+			 $('#upload-bulk-contacts').show();
           });
 }
